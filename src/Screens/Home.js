@@ -6,7 +6,8 @@ import {
   SafeAreaView,
   TextInput,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+// import { AntDesign } from "@expo/vector-icons";
+import { AntDesign } from '@expo/vector-icons';
 
 import { useState } from "react";
 import axios from "axios";
@@ -43,13 +44,15 @@ const Home = () => {
             placeholder="weather"
             onChangeText={(value) => setCity(value)}
           />
-		  <AntDesign name="check" size={24} color="black" onPress={getWeather} style={styles.check} />
+		  {
+        city.length > 0 ? <AntDesign name="checkcircle" size={24} onPress={getWeather} style={styles.check} /> : null
+      }
         </View>
 		{Object.keys(data).length > 0 ?
 		<>
 			<View style={styles.weather}>
 				<Text style={styles.loction}>{data.name} , {data.sys.country}</Text>
-				<Text style={styles.temp}>{Math.round(data.main.temp)} <Text style={{color:'#FF5B00'}}>°C</Text></Text>
+				<Text style={styles.temp}>{Math.round(data.main.temp - 273)} <Text style={{color:'#FF5B00'}}>°C</Text></Text>
 				<Text style={styles.weatherCondition}>{data.weather[0].main}</Text>
 			</View>
 		</>
@@ -76,7 +79,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 16,
     width: "80%",
-	justifyContent:'space-between'
+    backgroundColor: 'transparent',
+	justifyContent:'space-between',
+  borderColor:'#fff',
+  borderWidth:0.7
   },
   input: {
     height: 40,
@@ -90,11 +96,12 @@ const styles = StyleSheet.create({
   },
   check:{
 	marginLeft:8,
-	backgroundColor:'#8D72E1',
-	paddingVertical:10,
-	paddingHorizontal:5,
-	borderTopRightRadius:10,
-	borderBottomRightRadius:10
+  color:'#000'
+	// backgroundColor:'#8D72E1',
+	// paddingVertical:10,
+	// paddingHorizontal:5,
+	// borderTopRightRadius:10,
+	// borderBottomRightRadius:10
   },
   loction:{
 	color:'#fff',
@@ -102,7 +109,7 @@ const styles = StyleSheet.create({
   },
   temp:{
 	color:'#FCE700',
-	fontSize:60,
+	fontSize:50,
 	backgroundColor:'rgba(238, 238, 238,0.3)',
 	marginTop:30,
 	marginBottom:10,
