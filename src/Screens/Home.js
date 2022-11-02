@@ -5,6 +5,7 @@ import {
   ImageBackground,
   SafeAreaView,
   TextInput,
+  ActivityIndicator
 } from "react-native";
 // import { AntDesign } from "@expo/vector-icons";
 import { AntDesign } from '@expo/vector-icons';
@@ -16,9 +17,11 @@ import Bg from "./../../assets/d5b109a03cd7c1022a7de2b99163950a.jpg";
 
 const Home = () => {
   const [city, setCity] = useState("");
-  const [data, setData] = useState({})
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const getWeather = async () => {
+    setLoading(true)
 	if(!city.trim()){
 		console.log('error wwwww');
 	}else{
@@ -26,11 +29,12 @@ const Home = () => {
 		try {
 			const key = '4a8ea20697876bc7c2d6ff41889b631f'
 			const result = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`)
-			console.log(result.data.weather);
-			setData(result.data)
-			console.log(data.weather);
+			setData(result.data);
+      setLoading(false);
 		} catch (error) {
 			console.log(error);
+      alert('wrong city name');
+      setLoading(false);
 		}
 	}
   }
@@ -44,9 +48,11 @@ const Home = () => {
             placeholder="weather"
             onChangeText={(value) => setCity(value)}
           />
-		  {
-        city.length > 0 ? <AntDesign name="checkcircle" size={24} onPress={getWeather} style={styles.check} /> : null
-      }
+          {
+            !loading ? <>
+              {city.length > 0 ? <AntDesign name="checkcircle" size={24} onPress={getWeather} style={styles.check} /> : null}
+            </> : <ActivityIndicator size='small' color='green' />
+          }
         </View>
 		{Object.keys(data).length > 0 ?
 		<>
